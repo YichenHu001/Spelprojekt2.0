@@ -43,6 +43,7 @@ namespace _21
         Texture2D Red_Cross;
         // false = open
         // true = close
+        bool Music_Open_Or_Close = false;
         string Text_Music_Change = "Music Change";
         Vector2 Options_Page_Title_Position = new Vector2(40, 25);
         Rectangle Options_Page_Position = new Rectangle(-50, -50 - 1000, 1700, 1060);
@@ -437,6 +438,10 @@ namespace _21
                 }
                 Music_Choose();
             }
+            if (Mouse_Cursor_Position.Intersects(Options_Page_Music_Display_Location_Position))
+            {
+                Cursor_Or_Finger = false;
+            }
             if (Mouse_Cursor_Position.Intersects(Options_Page_Music_Display_Location_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
             {
                 if (music_num != 3)
@@ -445,6 +450,7 @@ namespace _21
                 }
                 else
                     music_num = 0;
+                Music_Open_Or_Close = !Music_Open_Or_Close;
                 Music_Choose();
             }
 
@@ -465,21 +471,36 @@ namespace _21
 
 
 
-            bool Beyond_21()
+            int Player_Score()
             {
                 int Player_Cards_Score_Sum = 0;
                 for (int i = 0; i < Player_Cards_Score.Count; i++)
                 {
-                    Player_Cards_Score_Sum += Player_Cards_Score[i];
+                    if (Player_Cards_Score[i] > 10)
+                    {
+                        Player_Cards_Score_Sum += 10;
+                    }
+                    else
+                    {
+                        Player_Cards_Score_Sum += Player_Cards_Score[i];
+                    }
                 }
-                if (Player_Cards_Score_Sum > 21)
+                if (Player_Cards_Score.Contains(1) && Player_Cards_Score_Sum <= 11)
+                {
+                    Player_Cards_Score_Sum += 10;
+                }
+
+                return Player_Cards_Score_Sum;
+            }
+
+            bool Beyond_21()
+            {
+                if (Player_Score() > 21)
                 {
                     return false;
                 }
                 else
-                {
                     return true;
-                }
             }
 
             void GameStart()
@@ -698,6 +719,10 @@ namespace _21
                 _spriteBatch.Draw(Options_Page_Music_Display_Location, Options_Page_Music_Display_Location_Position, Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Music_Change, Text_Music_Change_Position, Color.Black);
                 _spriteBatch.Draw(Options_Page_Music_Change_Right_Button, Options_page_Music_change_Right_Button_Position, Color.White);
+                if (Music_Open_Or_Close)
+                {
+                    _spriteBatch.Draw(Red_Cross, Options_Page_Music_Display_Location_Position, Color.White);
+                }
             }
 
             if (Game_Start)
