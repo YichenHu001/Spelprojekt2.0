@@ -60,10 +60,12 @@ namespace _21
 
         List<Texture2D> Player_Cards = new List<Texture2D>();
         List<Texture2D> Robot_Cards = new List<Texture2D>();
+        List<int> Player_Cards_Score = new List<int>();
+        List<int> Robot_Cards_Score = new List<int>();
         bool Game_Start = false;
         Texture2D Game_Background;
         Rectangle Game_Background_Position = new Rectangle(0, 0, 1600, 960);
-
+        int Cards_Shown = 0;
 
 
         bool Initial_Page = true;
@@ -152,10 +154,10 @@ namespace _21
         Random RandomNum = new Random();
 
 
-        public List<int> Card_Typ_Clubs = new List<int>();
-        public List<int> Card_Typ_Diamonds = new List<int>();
-        public List<int> Card_Typ_Hearts = new List<int>();
-        public List<int> Card_Typ_Spades = new List<int>();
+        List<int> Card_Typ_Clubs = new List<int>();
+        List<int> Card_Typ_Diamonds = new List<int>();
+        List<int> Card_Typ_Hearts = new List<int>();
+        List<int> Card_Typ_Spades = new List<int>();
 
 
         public Game1()
@@ -435,6 +437,16 @@ namespace _21
                 }
                 Music_Choose();
             }
+            if (Mouse_Cursor_Position.Intersects(Options_Page_Music_Display_Location_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            {
+                if (music_num != 3)
+                {
+                    music_num = 3;
+                }
+                else
+                    music_num = 0;
+                Music_Choose();
+            }
 
             //Game Start
 
@@ -446,58 +458,116 @@ namespace _21
             {
                 Cursor_Or_Finger = false;
                 Initial_Page = false;
-                Game_Start = true;
                 Initial_Page_Remove_All();
+                GameStart();
             }
 
-            if (Game_Start)
+
+
+
+            bool Beyond_21()
             {
-                Player_Cards.Add(All_Cards[Get_One_Card()]);
-                Player_Cards.Add(All_Cards[Get_One_Card()]);
-                Robot_Cards.Add(All_Cards[Get_One_Card()]);
+                int Player_Cards_Score_Sum = 0;
+                for (int i = 0; i < Player_Cards_Score.Count; i++)
+                {
+                    Player_Cards_Score_Sum += Player_Cards_Score[i];
+                }
+                if (Player_Cards_Score_Sum > 21)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            void GameStart()
+            {
+                Game_Start = true;
+                Player_Data();
+                Robot_Data();
+                Player_Data();
+                Robot_Data();
             }
 
 
-
-
-
-            int Get_One_Card()
+            void Player_Data()
             {
                 int Card_Typ_Num = RandomNum.Next(0, 4);
+                int Card_Tmp_Num;
+                Card_Tmp_Num = Get_One_Card(Card_Typ_Num);
+                Player_Cards.Add(All_Cards[Card_Tmp_Num]);
+                Player_Cards_Score.Add(Card_Tmp_Num - Card_Typ_Num * 13);
+            }
+
+            void Robot_Data()
+            {
+                int Card_Typ_Num = RandomNum.Next(0, 4);
+                int Card_Tmp_Num = Get_One_Card(Card_Typ_Num);
+                Robot_Cards.Add(All_Cards[Card_Tmp_Num]);
+                Robot_Cards_Score.Add(Card_Tmp_Num - Card_Typ_Num * 13);
+            }
+
+            int Get_One_Card(int Card_Typ_Num)
+            {
+                int Card_Typ_num = RandomNum.Next(0, 4);
+                if (Card_Typ_Num == 4)
+                {
+                    Shuffle_Cards();
+                    Card_Typ_Num = Card_Typ_num;
+                }
                 //Club     = 0
                 //Diamonds = 1
                 //Hearts   = 2
                 //Spades   = 3
+                //Shyffle  = 4
                 int Tmp_Card = 0;
-                if (Card_Typ_Num == 0)
+                if (Card_Typ_Num == 0 && Card_Typ_Clubs.Count > 0)
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Clubs.Count);
                     Tmp_Card = Card_Typ_Clubs[Random_Card];
                     Card_Typ_Clubs.Remove(Random_Card);
                     return Card_Typ_Num * 12 + Tmp_Card;
                 }
-                if (Card_Typ_Num == 1)
+                else
+                {
+                    Card_Typ_Num++;
+                }
+                if (Card_Typ_Num == 1 && Card_Typ_Diamonds.Count > 0)
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Diamonds.Count);
                     Tmp_Card = Card_Typ_Diamonds[Random_Card];
                     Card_Typ_Diamonds.Remove(Random_Card);
                     return Card_Typ_Num * 12 + Tmp_Card;
                 }
-                if (Card_Typ_Num == 2)
+                else
+                {
+                    Card_Typ_Num++;
+                }
+                if (Card_Typ_Num == 2 && Card_Typ_Hearts.Count > 0)
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Hearts.Count);
                     Tmp_Card = Card_Typ_Hearts[Random_Card];
                     Card_Typ_Hearts.Remove(Random_Card);
                     return Card_Typ_Num * 12 + Tmp_Card;
                 }
-                if (Card_Typ_Num == 3)
+                else
+                {
+                    Card_Typ_Num++;
+                }
+                if (Card_Typ_Num == 3 && Card_Typ_Spades.Count > 0)
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Spades.Count);
                     Tmp_Card = Card_Typ_Spades[Random_Card];
                     Card_Typ_Spades.Remove(Random_Card);
                     return Card_Typ_Num * 12 + Tmp_Card;
                 }
-                return 0;
+                else
+                {
+                    Card_Typ_Num++;
+                    return Get_One_Card(Card_Typ_Num);
+                }
             }
 
             void Shuffle_Cards()
@@ -532,6 +602,9 @@ namespace _21
                         break;
                     case 2:
                         MediaPlayer.Play(Music2);
+                        break;
+                    case 3:
+                        MediaPlayer.Stop();
                         break;
                     default:
                         break;
@@ -630,6 +703,10 @@ namespace _21
             if (Game_Start)
             {
                 _spriteBatch.Draw(Game_Background, Game_Background_Position, Color.White);
+                foreach (var All_Player_Cards in Player_Cards)
+                {
+
+                }
             }
 
             if (Cursor_Or_Finger)
