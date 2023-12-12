@@ -467,9 +467,15 @@ namespace _21
                 Initial_Page_Remove_All();
                 GameStart();
             }
+            if (Beyond_21_Player() || Beyond_21_Robot())
+            {
+                New_turn();
+            }
 
+            void New_turn()
+            {
 
-
+            }
 
             int Player_Score()
             {
@@ -493,7 +499,39 @@ namespace _21
                 return Player_Cards_Score_Sum;
             }
 
-            bool Beyond_21()
+            int Robot_Score()
+            {
+                int Robot_Cards_Score_Sum = 0;
+                for (int i = 0; i < Robot_Cards_Score.Count; i++)
+                {
+                    if (Robot_Cards_Score[i] > 10)
+                    {
+                        Robot_Cards_Score_Sum += 10;
+                    }
+                    else
+                    {
+                        Robot_Cards_Score_Sum += Robot_Cards_Score[i];
+                    }
+                }
+                if (Robot_Cards_Score.Contains(1) && Robot_Cards_Score_Sum <= 11)
+                {
+                    Robot_Cards_Score_Sum += 10;
+                }
+
+                return Robot_Cards_Score_Sum;
+            }
+
+            bool Beyond_21_Robot()
+            {
+                if (Robot_Score() > 21)
+                {
+                    return false;
+                }
+                else
+                    return true;
+            }
+
+            bool Beyond_21_Player()
             {
                 if (Player_Score() > 21)
                 {
