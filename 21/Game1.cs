@@ -66,7 +66,8 @@ namespace _21
         bool Game_Start = false;
         Texture2D Game_Background;
         Rectangle Game_Background_Position = new Rectangle(0, 0, 1600, 960);
-        int Cards_Shown = 0;
+        Rectangle Player_Card_Position_1 = new Rectangle(300, 300, 50, 50);
+        Rectangle Player_Card_Position_2 = new Rectangle(400, 300, 50, 50);
 
 
         bool Initial_Page = true;
@@ -78,6 +79,8 @@ namespace _21
 
 
         int music_num = 1;
+        int PlayerScore;
+        int Tmp_Card;
 
         MouseState mouse = Mouse.GetState();
         MouseState oldmouse = Mouse.GetState();
@@ -170,8 +173,14 @@ namespace _21
             _graphics.PreferredBackBufferWidth = 1600;
             _graphics.PreferredBackBufferHeight = 960;
 
-            // TODO: Add your initialization logic here
 
+
+
+        }
+
+        protected override void Initialize()
+        {
+            // TODO: Add your initialization logic here
             for (int i = 1; i < 14; i++)
             {
                 Card_Typ_Clubs.Add(i);
@@ -193,67 +202,6 @@ namespace _21
             //Hearts   = 2
             //Spades   = 3
 
-            All_Cards[1] = CA;
-            All_Cards[2] = C2;
-            All_Cards[3] = C3;
-            All_Cards[4] = C4;
-            All_Cards[5] = C5;
-            All_Cards[6] = C6;
-            All_Cards[7] = C7;
-            All_Cards[8] = C8;
-            All_Cards[9] = C9;
-            All_Cards[10] = C10;
-            All_Cards[11] = CJ;
-            All_Cards[12] = CQ;
-            All_Cards[13] = CK;
-
-            All_Cards[14] = DA;
-            All_Cards[15] = D2;
-            All_Cards[16] = D3;
-            All_Cards[17] = D4;
-            All_Cards[18] = D5;
-            All_Cards[19] = D6;
-            All_Cards[20] = D7;
-            All_Cards[21] = D8;
-            All_Cards[22] = D9;
-            All_Cards[23] = D10;
-            All_Cards[24] = DJ;
-            All_Cards[25] = DQ;
-            All_Cards[26] = DK;
-
-            All_Cards[27] = HA;
-            All_Cards[28] = H2;
-            All_Cards[29] = H3;
-            All_Cards[30] = H4;
-            All_Cards[31] = H5;
-            All_Cards[32] = H6;
-            All_Cards[33] = H7;
-            All_Cards[34] = H8;
-            All_Cards[35] = H9;
-            All_Cards[36] = H10;
-            All_Cards[37] = HJ;
-            All_Cards[38] = HQ;
-            All_Cards[39] = HK;
-
-            All_Cards[40] = SA;
-            All_Cards[41] = S2;
-            All_Cards[42] = S3;
-            All_Cards[43] = S4;
-            All_Cards[44] = S5;
-            All_Cards[45] = S6;
-            All_Cards[46] = S7;
-            All_Cards[47] = S8;
-            All_Cards[48] = S9;
-            All_Cards[49] = S10;
-            All_Cards[50] = SJ;
-            All_Cards[51] = SQ;
-            All_Cards[52] = SK;
-
-        }
-
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -349,6 +297,64 @@ namespace _21
             SK = Content.Load<Texture2D>("card_spades_K");
             SA = Content.Load<Texture2D>("card_spades_A");
 
+            All_Cards[1] = CA;
+            All_Cards[2] = C2;
+            All_Cards[3] = C3;
+            All_Cards[4] = C4;
+            All_Cards[5] = C5;
+            All_Cards[6] = C6;
+            All_Cards[7] = C7;
+            All_Cards[8] = C8;
+            All_Cards[9] = C9;
+            All_Cards[10] = C10;
+            All_Cards[11] = CJ;
+            All_Cards[12] = CQ;
+            All_Cards[13] = CK;
+
+            All_Cards[14] = DA;
+            All_Cards[15] = D2;
+            All_Cards[16] = D3;
+            All_Cards[17] = D4;
+            All_Cards[18] = D5;
+            All_Cards[19] = D6;
+            All_Cards[20] = D7;
+            All_Cards[21] = D8;
+            All_Cards[22] = D9;
+            All_Cards[23] = D10;
+            All_Cards[24] = DJ;
+            All_Cards[25] = DQ;
+            All_Cards[26] = DK;
+
+            All_Cards[27] = HA;
+            All_Cards[28] = H2;
+            All_Cards[29] = H3;
+            All_Cards[30] = H4;
+            All_Cards[31] = H5;
+            All_Cards[32] = H6;
+            All_Cards[33] = H7;
+            All_Cards[34] = H8;
+            All_Cards[35] = H9;
+            All_Cards[36] = H10;
+            All_Cards[37] = HJ;
+            All_Cards[38] = HQ;
+            All_Cards[39] = HK;
+
+            All_Cards[40] = SA;
+            All_Cards[41] = S2;
+            All_Cards[42] = S3;
+            All_Cards[43] = S4;
+            All_Cards[44] = S5;
+            All_Cards[45] = S6;
+            All_Cards[46] = S7;
+            All_Cards[47] = S8;
+            All_Cards[48] = S9;
+            All_Cards[49] = S10;
+            All_Cards[50] = SJ;
+            All_Cards[51] = SQ;
+            All_Cards[52] = SK;
+
+
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -368,7 +374,7 @@ namespace _21
             Cursor_Or_Finger = true;
             Grey_Or_Red = true;
 
-
+            PlayerScore = Player_Score();
 
             if (Card_Typ_Clubs.Count + Card_Typ_Diamonds.Count + Card_Typ_Hearts.Count + Card_Typ_Spades.Count == 0)
             {
@@ -464,6 +470,7 @@ namespace _21
             {
                 Cursor_Or_Finger = false;
                 Initial_Page = false;
+                Game_Start = true;
                 Initial_Page_Remove_All();
                 GameStart();
             }
@@ -472,9 +479,15 @@ namespace _21
                 New_turn();
             }
 
+
+
             void New_turn()
             {
-
+                Player_Cards_Score.Clear();
+                Robot_Cards_Score.Clear();
+                Player_Cards.Clear();
+                Robot_Cards.Clear();
+                GameStart();
             }
 
             int Player_Score()
@@ -495,6 +508,8 @@ namespace _21
                 {
                     Player_Cards_Score_Sum += 10;
                 }
+
+                // 制作可视化系统，查看为何数字异常
 
                 return Player_Cards_Score_Sum;
             }
@@ -525,25 +540,24 @@ namespace _21
             {
                 if (Robot_Score() > 21)
                 {
-                    return false;
+                    return true;
                 }
                 else
-                    return true;
+                    return false;
             }
 
             bool Beyond_21_Player()
             {
                 if (Player_Score() > 21)
                 {
-                    return false;
+                    return true;
                 }
                 else
-                    return true;
+                    return false;
             }
 
             void GameStart()
             {
-                Game_Start = true;
                 Player_Data();
                 Robot_Data();
                 Player_Data();
@@ -554,10 +568,9 @@ namespace _21
             void Player_Data()
             {
                 int Card_Typ_Num = RandomNum.Next(0, 4);
-                int Card_Tmp_Num;
-                Card_Tmp_Num = Get_One_Card(Card_Typ_Num);
+                int Card_Tmp_Num = Get_One_Card(Card_Typ_Num);
                 Player_Cards.Add(All_Cards[Card_Tmp_Num]);
-                Player_Cards_Score.Add(Card_Tmp_Num - Card_Typ_Num * 13);
+                Player_Cards_Score.Add(Card_Tmp_Num + Card_Typ_Num * 13);
             }
 
             void Robot_Data()
@@ -570,24 +583,18 @@ namespace _21
 
             int Get_One_Card(int Card_Typ_Num)
             {
-                int Card_Typ_num = RandomNum.Next(0, 4);
-                if (Card_Typ_Num == 4)
-                {
-                    Shuffle_Cards();
-                    Card_Typ_Num = Card_Typ_num;
-                }
                 //Club     = 0
                 //Diamonds = 1
                 //Hearts   = 2
                 //Spades   = 3
-                //Shyffle  = 4
-                int Tmp_Card = 0;
                 if (Card_Typ_Num == 0 && Card_Typ_Clubs.Count > 0)
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Clubs.Count);
                     Tmp_Card = Card_Typ_Clubs[Random_Card];
+                    int Return_Num = Tmp_Card;
                     Card_Typ_Clubs.Remove(Random_Card);
-                    return Card_Typ_Num * 12 + Tmp_Card;
+
+                    return Return_Num;
                 }
                 else
                 {
@@ -597,8 +604,9 @@ namespace _21
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Diamonds.Count);
                     Tmp_Card = Card_Typ_Diamonds[Random_Card];
+                    int Return_Num = 13 + Tmp_Card;
                     Card_Typ_Diamonds.Remove(Random_Card);
-                    return Card_Typ_Num * 12 + Tmp_Card;
+                    return Return_Num;
                 }
                 else
                 {
@@ -608,8 +616,9 @@ namespace _21
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Hearts.Count);
                     Tmp_Card = Card_Typ_Hearts[Random_Card];
+                    int Return_Num = 26 + Tmp_Card;
                     Card_Typ_Hearts.Remove(Random_Card);
-                    return Card_Typ_Num * 12 + Tmp_Card;
+                    return Return_Num;
                 }
                 else
                 {
@@ -619,12 +628,13 @@ namespace _21
                 {
                     int Random_Card = RandomNum.Next(0, Card_Typ_Spades.Count);
                     Tmp_Card = Card_Typ_Spades[Random_Card];
+                    int Return_Num = 39 + Tmp_Card;
                     Card_Typ_Spades.Remove(Random_Card);
-                    return Card_Typ_Num * 12 + Tmp_Card;
+                    return Return_Num;
                 }
                 else
                 {
-                    Card_Typ_Num++;
+                    Card_Typ_Num = 0;
                     return Get_One_Card(Card_Typ_Num);
                 }
             }
@@ -726,7 +736,6 @@ namespace _21
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             _spriteBatch.Begin();
 
             if (Initial_Page)
@@ -766,10 +775,9 @@ namespace _21
             if (Game_Start)
             {
                 _spriteBatch.Draw(Game_Background, Game_Background_Position, Color.White);
-                foreach (var All_Player_Cards in Player_Cards)
-                {
-
-                }
+                _spriteBatch.Draw(Player_Cards[0], Player_Card_Position_1, Color.White);
+                _spriteBatch.Draw(Player_Cards[1], Player_Card_Position_2, Color.White);
+                _spriteBatch.DrawString(Times_New_Roman_48, PlayerScore.ToString(), new Vector2(500,500), Color.Black);
             }
 
             if (Cursor_Or_Finger)
