@@ -752,6 +752,18 @@
 /processorParam:TextureFormat=Color
 /build:card_spades_Q.png
 
+#begin cardFan2.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cardFan2.ogg
+
+#begin cardSlide5.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:cardSlide5.ogg
+
 #begin cursor_hand.png
 /importer:TextureImporter
 /processor:TextureProcessor
