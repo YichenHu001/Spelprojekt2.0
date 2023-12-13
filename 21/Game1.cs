@@ -70,6 +70,7 @@ namespace _21
         Texture2D Game_Stop_Button;
         Texture2D Game_Robot_Score_Display_Location;
         Texture2D Game_Player_Score_Display_Location;
+        Texture2D Game_Options_Button;
         string Text_Need_More_Card = "Need More Card";
         string Text_Stop = "Stop";
         Rectangle Game_Background_Position = new Rectangle(0, 0, 1600, 960);
@@ -85,6 +86,7 @@ namespace _21
         Vector2 Robot_Score_Position = new Vector2(770, 100);
         Rectangle Game_Robot_Score_Display_Location_Position = new Rectangle(765, 100, 60, 60);
         Rectangle Game_Player_Score_Display_Location_Position = new Rectangle(760, 475, 60, 60);
+        Rectangle Game_Options_Button_Position = new Rectangle(0, 0, 50, 50);
         int PlayerScore;
         int RobotScore;
 
@@ -254,6 +256,9 @@ namespace _21
             Game_Background = Content.Load<Texture2D>("21点桌面2.0");
             Game_Player_Score_Display_Location = Content.Load<Texture2D>("yellow_button00");
             Game_Robot_Score_Display_Location = Content.Load<Texture2D>("yellow_button00");
+            Game_Options_Button = Content.Load<Texture2D>("gear");
+            Game_Need_More_Card_Button = Content.Load<Texture2D>("yellow_button00");
+            Game_Stop_Button = Content.Load<Texture2D>("yellow_button00");
 
             Music0 = Content.Load<Song>("Snowland Loop Short");
             Music1 = Content.Load<Song>("Woodland Fantasy");
@@ -387,8 +392,6 @@ namespace _21
 
             All_Cards[53] = Card_Back;
 
-            Game_Need_More_Card_Button = Content.Load<Texture2D>("yellow_button00");
-            Game_Stop_Button = Content.Load<Texture2D>("yellow_button00");
 
             // TODO: use this.Content to load your game content here
         }
@@ -441,6 +444,12 @@ namespace _21
             {
                 Cursor_Or_Finger = false;
                 Grey_Or_Red = false;
+            }
+            if (Game_Start == true && Mouse_Cursor_Position.Intersects(Options_Page_Close_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            {
+                Options_Page_Open_Or_Close = false;
+                All_Game_Page_Back();
+                Options_Page_Remove_All();
             }
             if (Mouse_Cursor_Position.Intersects(Options_Page_Close_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
             {
@@ -547,6 +556,13 @@ namespace _21
                     Time = 0;
                 }
             }
+            if (Mouse_Cursor_Position.Intersects(Game_Options_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            {
+                Options_Page_Open_Or_Close = true;
+                Game_Page_Remove_All();
+                All_Options_Page_Back();
+            }
+
 
             void Robot_Turn()
             {
@@ -772,6 +788,17 @@ namespace _21
                 }
             }
 
+            void Game_Page_Remove_All()
+            {
+                Game_Need_More_Card_Button_Position.Y += 1000;
+                Stop_Button_Position.Y += 1000;
+            }
+
+            void All_Game_Page_Back()
+            {
+                Game_Need_More_Card_Button_Position.Y -= 1000;
+                Stop_Button_Position.Y -= 1000;
+            }
 
             void Options_Page_Remove_All()
             {
@@ -841,6 +868,31 @@ namespace _21
                 _spriteBatch.DrawString(Times_New_Roman_36, Secend_Game_Title, Secend_Game_Title_Position, Color.Gray);
             }
 
+            if (Game_Start)
+            {
+                _spriteBatch.Draw(Game_Background, Game_Background_Position, Color.White);
+                _spriteBatch.Draw(Player_Cards[0], Player_Card_Position_1, Color.White);
+                _spriteBatch.Draw(Player_Cards[1], Player_Card_Position_2, Color.White);
+                _spriteBatch.Draw(Game_Player_Score_Display_Location, Game_Player_Score_Display_Location_Position, Color.White);
+                _spriteBatch.DrawString(Times_New_Roman_48, PlayerScore.ToString(), Player_Score_Position, Color.Black);
+                _spriteBatch.Draw(Game_Need_More_Card_Button, Game_Need_More_Card_Button_Position, Color.White);
+                _spriteBatch.DrawString(Times_New_Roman_36, Text_Need_More_Card, Text_Need_More_Card_Position, Color.Black);
+                _spriteBatch.Draw(Game_Stop_Button, Stop_Button_Position,Color.White);
+                _spriteBatch.DrawString(Times_New_Roman_36, Text_Stop, Text_Stop_Position, Color.Black);
+                _spriteBatch.Draw(Robot_Cards[0], Robot_Card_Position_1, Color.White);
+                _spriteBatch.Draw(Game_Robot_Score_Display_Location, Game_Robot_Score_Display_Location_Position, Color.White);
+                _spriteBatch.Draw(Game_Options_Button, Game_Options_Button_Position, Color.White);
+                if (RobotTurn)
+                {
+                    _spriteBatch.DrawString(Times_New_Roman_36, RobotScore.ToString(), Robot_Score_Position, Color.Black);
+                    _spriteBatch.Draw(Robot_Cards[1], Robot_Card_Position_2, Color.White);
+                }
+                else
+                {
+                    _spriteBatch.DrawString(Times_New_Roman_36, "0", Robot_Score_Position, Color.Black);
+                    _spriteBatch.Draw(All_Cards[53], Robot_Card_Position_2, Color.White);
+                }
+            }
 
             if (Options_Page_Open_Or_Close)
             {
@@ -861,31 +913,6 @@ namespace _21
                 if (Music_Open_Or_Close)
                 {
                     _spriteBatch.Draw(Red_Cross, Options_Page_Music_Display_Location_Position, Color.White);
-                }
-            }
-
-            if (Game_Start)
-            {
-                _spriteBatch.Draw(Game_Background, Game_Background_Position, Color.White);
-                _spriteBatch.Draw(Player_Cards[0], Player_Card_Position_1, Color.White);
-                _spriteBatch.Draw(Player_Cards[1], Player_Card_Position_2, Color.White);
-                _spriteBatch.Draw(Game_Player_Score_Display_Location, Game_Player_Score_Display_Location_Position, Color.White);
-                _spriteBatch.DrawString(Times_New_Roman_48, PlayerScore.ToString(), Player_Score_Position, Color.Black);
-                _spriteBatch.Draw(Game_Need_More_Card_Button, Game_Need_More_Card_Button_Position, Color.White);
-                _spriteBatch.DrawString(Times_New_Roman_36, Text_Need_More_Card, Text_Need_More_Card_Position, Color.Black);
-                _spriteBatch.Draw(Game_Stop_Button, Stop_Button_Position,Color.White);
-                _spriteBatch.DrawString(Times_New_Roman_36, Text_Stop, Text_Stop_Position, Color.Black);
-                _spriteBatch.Draw(Robot_Cards[0], Robot_Card_Position_1, Color.White);
-                _spriteBatch.Draw(Game_Robot_Score_Display_Location, Game_Robot_Score_Display_Location_Position, Color.White);
-                if (RobotTurn)
-                {
-                    _spriteBatch.DrawString(Times_New_Roman_36, RobotScore.ToString(), Robot_Score_Position, Color.Black);
-                    _spriteBatch.Draw(Robot_Cards[1], Robot_Card_Position_2, Color.White);
-                }
-                else
-                {
-                    _spriteBatch.DrawString(Times_New_Roman_36, "0", Robot_Score_Position, Color.Black);
-                    _spriteBatch.Draw(All_Cards[53], Robot_Card_Position_2, Color.White);
                 }
             }
 
