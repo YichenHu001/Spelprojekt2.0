@@ -90,6 +90,7 @@ namespace _21
         int PlayerScore;
         int RobotScore;
         int Tmp_Card;
+        int Time = 0;
 
         MouseState mouse = Mouse.GetState();
         MouseState oldmouse = Mouse.GetState();
@@ -104,6 +105,7 @@ namespace _21
         SoundEffect Click_Invalid;
         SoundEffect Give_Cards;
         SoundEffect Shuffle;
+        SoundEffect Fail_Sound;
 
         Dictionary<int, Texture2D> All_Cards = new Dictionary<int, Texture2D>();
 
@@ -248,7 +250,9 @@ namespace _21
             Click_Invalid = Content.Load<SoundEffect>("jingles_PIZZI16");
             Give_Cards = Content.Load<SoundEffect>("cardSlide5");
             Shuffle = Content.Load<SoundEffect>("cardFan2");
-            
+            Fail_Sound = Content.Load<SoundEffect>("jingles_SAX01");
+
+
 
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(Music1);
@@ -492,7 +496,12 @@ namespace _21
             }
             if (Beyond_21_Player() || Beyond_21_Robot())
             {
-                New_turn();
+                Time++;
+                if (Time == 60)
+                {
+                    New_turn();
+                    Time = 0;
+                }
             }
             if (Mouse_Cursor_Position.Intersects(Game_Need_More_Card_Button_Position))
             {
@@ -503,9 +512,24 @@ namespace _21
                 Player_Data();
             }
 
+            if (Mouse_Cursor_Position.Intersects(Stop_Button_Position))
+            {
+                Cursor_Or_Finger = false;
+            }
+            if (Mouse_Cursor_Position.Intersects(Stop_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            {
+                Robot_Turn();
+            }
+
+
+            void Robot_Turn()
+            {
+
+            }
 
             void New_turn()
             {
+                Fail_Sound.Play();
                 Player_Cards_Score.Clear();
                 Robot_Cards_Score.Clear();
                 Player_Cards.Clear();
@@ -593,6 +617,10 @@ namespace _21
                 Player_Cards.Add(All_Cards[Card_Tmp_Num]);
                 Player_Cards_Score.Add(Card_Tmp_Num - Card_Typ_Num * 13);
                 Give_Cards.Play();
+                if (Player_Cards.Count > 2)
+                {
+                    Player_Cards.Remove(Player_Cards[0]);
+                }
             }
 
             void Robot_Data()

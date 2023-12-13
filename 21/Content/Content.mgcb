@@ -818,6 +818,12 @@
 /processorParam:TextureFormat=Color
 /build:grey_crossGrey.png
 
+#begin jingles_HIT01.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:jingles_HIT01.ogg
+
 #begin jingles_PIZZI00.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
@@ -829,6 +835,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:jingles_PIZZI16.ogg
+
+#begin jingles_SAX01.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:jingles_SAX01.ogg
 
 #begin metalPanel_yellow.png
 /importer:TextureImporter
