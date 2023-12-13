@@ -68,6 +68,8 @@ namespace _21
         Texture2D Game_Background;
         Texture2D Game_Need_More_Card_Button;
         Texture2D Game_Stop_Button;
+        Texture2D Game_Robot_Score_Display_Location;
+        Texture2D Game_Player_Score_Display_Location;
         string Text_Need_More_Card = "Need More Card";
         string Text_Stop = "Stop";
         Rectangle Game_Background_Position = new Rectangle(0, 0, 1600, 960);
@@ -76,11 +78,13 @@ namespace _21
         Rectangle Game_Need_More_Card_Button_Position = new Rectangle(100, 560, 325, 60);
         Rectangle Stop_Button_Position = new Rectangle(1100, 560, 325, 60);
         Vector2 Text_Need_More_Card_Position = new Vector2(100, 560);
-        Vector2 Player_Score_Position = new Vector2(750, 475);
+        Vector2 Player_Score_Position = new Vector2(765, 475);
         Vector2 Text_Stop_Position = new Vector2(1225, 560);
-        Rectangle Robot_Card_Position_1 = new Rectangle(675, 100, 70, 70);
-        Rectangle Robot_Card_Position_2 = new Rectangle(850, 100, 70, 70);
-        Vector2 Robot_Score_Position = new Vector2(750, 100);
+        Rectangle Robot_Card_Position_1 = new Rectangle(660, 100, 70, 70);
+        Rectangle Robot_Card_Position_2 = new Rectangle(835, 100, 70, 70);
+        Vector2 Robot_Score_Position = new Vector2(770, 100);
+        Rectangle Game_Robot_Score_Display_Location_Position = new Rectangle(765, 100, 60, 60);
+        Rectangle Game_Player_Score_Display_Location_Position = new Rectangle(760, 475, 60, 60);
         int PlayerScore;
         int RobotScore;
 
@@ -248,6 +252,8 @@ namespace _21
             Red_Cross = Content.Load<Texture2D>("red_cross");
 
             Game_Background = Content.Load<Texture2D>("21点桌面2.0");
+            Game_Player_Score_Display_Location = Content.Load<Texture2D>("yellow_button00");
+            Game_Robot_Score_Display_Location = Content.Load<Texture2D>("yellow_button00");
 
             Music0 = Content.Load<Song>("Snowland Loop Short");
             Music1 = Content.Load<Song>("Woodland Fantasy");
@@ -863,12 +869,14 @@ namespace _21
                 _spriteBatch.Draw(Game_Background, Game_Background_Position, Color.White);
                 _spriteBatch.Draw(Player_Cards[0], Player_Card_Position_1, Color.White);
                 _spriteBatch.Draw(Player_Cards[1], Player_Card_Position_2, Color.White);
+                _spriteBatch.Draw(Game_Player_Score_Display_Location, Game_Player_Score_Display_Location_Position, Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_48, PlayerScore.ToString(), Player_Score_Position, Color.Black);
                 _spriteBatch.Draw(Game_Need_More_Card_Button, Game_Need_More_Card_Button_Position, Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Need_More_Card, Text_Need_More_Card_Position, Color.Black);
                 _spriteBatch.Draw(Game_Stop_Button, Stop_Button_Position,Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Stop, Text_Stop_Position, Color.Black);
                 _spriteBatch.Draw(Robot_Cards[0], Robot_Card_Position_1, Color.White);
+                _spriteBatch.Draw(Game_Robot_Score_Display_Location, Game_Robot_Score_Display_Location_Position, Color.White);
                 if (RobotTurn)
                 {
                     _spriteBatch.DrawString(Times_New_Roman_36, RobotScore.ToString(), Robot_Score_Position, Color.Black);
