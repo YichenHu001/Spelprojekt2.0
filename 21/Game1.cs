@@ -41,10 +41,11 @@ namespace _21
         Texture2D Options_Page_Music_Change_Right_Button;
         Texture2D Options_Page_Music_Display_Location;
         Texture2D Red_Cross;
-        // false = open
-        // true = close
+        Texture2D SoundEffekt_Open_Or_Close_Display_Location;
         bool Music_Open_Or_Close = false;
         string Text_Music_Change = "Music Change";
+        bool SoundEffekt_Open_Or_Close = true;
+        string Text_SoundEffekt = "Sound Effekt";
         Vector2 Options_Page_Title_Position = new Vector2(40, 25);
         Rectangle Options_Page_Position = new Rectangle(-50, -50 - 1000, 1700, 1060);
         Rectangle Options_Page_Close_Button_Position = new Rectangle(775, 30 - 1000, 50, 50);
@@ -52,11 +53,25 @@ namespace _21
         Rectangle Options_Page_Music_Display_Location_Position = new Rectangle(150, 300 - 1000, 300, 60);
         Rectangle Options_page_Music_change_Right_Button_Position = new Rectangle(500, 300 - 1000, 50, 60);
         Vector2 Text_Music_Change_Position = new Vector2(160, 300 - 1000);
-
+        Rectangle SoundEffekt_Open_Or_Close_Display_Location_Position = new Rectangle(150, 460 - 1000, 300, 60);
+        Vector2 Text_SoundEffekt_Position = new Vector2(160, 460);
 
         Texture2D Mouse_Cursor;
         Texture2D Mouse_Finger;
+        Texture2D Mouse_Finger_Yes_Or_No;
+        Texture2D Mouse_Sword_Bronze;
+        Texture2D Mouse_Sword_Gold;
+        Texture2D Mouse_Sword_Yes_Or_No;
         Rectangle Mouse_Cursor_Position = new Rectangle(0, 0, 30, 45);
+        Rectangle Mouse_Sword_Yes_Or_No_Position = new Rectangle(150, 610 - 1000, 50, 50);
+        Rectangle Mouse_Finger_Yes_Or_No_Position = new Rectangle(310, 610 - 1000, 50, 50);
+        bool Mouse_Sword_Yes_or_No = false;
+        bool Mouse_Finger_Yes_or_No = true;
+        Rectangle Mouse_Sword_Gold_Position = new Rectangle(150, 750, 50, 50);
+        Rectangle Mouse_Sword_Bronze_Position = new Rectangle(150, 680, 50, 50);
+        Rectangle Options_Mouse_Cursor_Position = new Rectangle(310, 750, 50, 50);
+        Rectangle Options_Mouse_Finger_Position = new Rectangle(310, 680, 50, 50);
+
 
 
         List<Texture2D> Player_Cards = new List<Texture2D>();
@@ -76,8 +91,8 @@ namespace _21
         Rectangle Game_Background_Position = new Rectangle(0, 0, 1600, 960);
         Rectangle Player_Card_Position_1 = new Rectangle(700, 700, 70, 70);
         Rectangle Player_Card_Position_2 = new Rectangle(800, 700, 70, 70);
-        Rectangle Game_Need_More_Card_Button_Position = new Rectangle(100, 560, 325, 60);
-        Rectangle Game_Stop_Button_Position = new Rectangle(1100, 560, 325, 60);
+        Rectangle Game_Need_More_Card_Button_Position = new Rectangle(100, 560 - 1000, 325, 60);
+        Rectangle Game_Stop_Button_Position = new Rectangle(1100, 560 - 1000, 325, 60);
         Vector2 Text_Need_More_Card_Position = new Vector2(100, 560);
         Vector2 Player_Score_Position = new Vector2(765, 475);
         Vector2 Text_Stop_Position = new Vector2(1225, 560);
@@ -97,7 +112,8 @@ namespace _21
         // false = false
         bool Options_Page_Open_Or_Close = false;
         bool Grey_Or_Red = true;
-
+        //True = open
+        //False = close
 
         int music_num = 1;
         int Tmp_Card;
@@ -244,6 +260,10 @@ namespace _21
             Mouse_Cursor = Content.Load<Texture2D>("cursor_pointer3D");
             Mouse_Finger = Content.Load<Texture2D>("cursor_hand");
             Title_Page = Content.Load<Texture2D>("21点封面素材");
+            Mouse_Finger_Yes_Or_No = Content.Load<Texture2D>("yellow_button00");
+            Mouse_Sword_Yes_Or_No = Content.Load<Texture2D>("yellow_button00");
+            Mouse_Sword_Gold = Content.Load<Texture2D>("cursorSword_gold");
+            Mouse_Sword_Bronze = Content.Load<Texture2D>("cursorSword_bronze");
 
             Options_Page = Content.Load<Texture2D>("metalPanel_yellow");
             Options_Page_Close_Button_Grey = Content.Load<Texture2D>("grey_crossGrey");
@@ -252,6 +272,7 @@ namespace _21
             Options_Page_Music_Change_Right_Button = Content.Load<Texture2D>("yellow_sliderRight");
             Options_Page_Music_Display_Location = Content.Load<Texture2D>("yellow_button00");
             Red_Cross = Content.Load<Texture2D>("red_cross");
+            SoundEffekt_Open_Or_Close_Display_Location = Content.Load<Texture2D>("yellow_button00");
 
             Game_Background = Content.Load<Texture2D>("21点桌面2.0");
             Game_Player_Score_Display_Location = Content.Load<Texture2D>("yellow_button00");
@@ -424,11 +445,17 @@ namespace _21
 
             if (Cursor_Or_Finger == false && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
             {
-                Click_valid.Play();
+                if (SoundEffekt_Open_Or_Close)
+                {
+                    Click_valid.Play();
+                }
             }
             if (Cursor_Or_Finger == true && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
             {
-                Click_Invalid.Play();
+                if (SoundEffekt_Open_Or_Close)
+                {
+                    Click_Invalid.Play();
+                }
             }
             if (Mouse_Cursor_Position.Intersects(Options_Button_Position))
             {
@@ -506,6 +533,34 @@ namespace _21
                 Music_Open_Or_Close = !Music_Open_Or_Close;
                 Music_Choose();
             }
+            if (Mouse_Cursor_Position.Intersects(SoundEffekt_Open_Or_Close_Display_Location_Position))
+            {
+                Cursor_Or_Finger = false;
+            }
+            if (Mouse_Cursor_Position.Intersects(SoundEffekt_Open_Or_Close_Display_Location_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            {
+                SoundEffekt_Open_Or_Close = !SoundEffekt_Open_Or_Close;
+            }
+
+            if (Mouse_Cursor_Position.Intersects(Mouse_Sword_Yes_Or_No_Position))
+            {
+                Cursor_Or_Finger = false;
+            }
+            if (Mouse_Cursor_Position.Intersects(Mouse_Sword_Yes_Or_No_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            {
+                Mouse_Sword_Yes_or_No = true;
+                Mouse_Finger_Yes_or_No = false;
+            }
+
+            if (Mouse_Cursor_Position.Intersects(Mouse_Finger_Yes_Or_No_Position))
+            {
+                Cursor_Or_Finger = false;
+            }
+            if (Mouse_Cursor_Position.Intersects(Mouse_Finger_Yes_Or_No_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            {
+                Mouse_Finger_Yes_or_No = true;
+                Mouse_Sword_Yes_or_No = false;
+            }
 
             //Game Start
 
@@ -519,6 +574,7 @@ namespace _21
                 Initial_Page = false;
                 Game_Start = true;
                 Initial_Page_Remove_All();
+                All_Game_Page_Back();
                 GameStart();
             }
             if (Beyond_21_Player())
@@ -570,7 +626,10 @@ namespace _21
 
             void Robot_Turn()
             {
-                Give_Cards.Play();
+                if (SoundEffekt_Open_Or_Close)
+                {
+                    Give_Cards.Play();
+                }
                 if (Robot_Score() <= PlayerScore && Robot_Score() < 21)
                 {
                     Robot_Data();
@@ -583,7 +642,10 @@ namespace _21
 
             void New_turn()
             {
-                Fail_Sound.Play();
+                if (SoundEffekt_Open_Or_Close)
+                {
+                    Fail_Sound.Play();
+                }
                 Player_Cards_Score.Clear();
                 Robot_Cards_Score.Clear();
                 Player_Cards.Clear();
@@ -671,7 +733,10 @@ namespace _21
                 int Card_Tmp_Num = Get_One_Card(Card_Typ_Num);
                 Player_Cards.Add(All_Cards[Card_Tmp_Num]);
                 Player_Cards_Score.Add(Card_Tmp_Num - Card_Typ_Num * 13);
-                Give_Cards.Play();
+                if (SoundEffekt_Open_Or_Close)
+                {
+                    Give_Cards.Play();
+                }
                 if (Player_Cards.Count > 2)
                 {
                     Player_Cards.Remove(Player_Cards[0]);
@@ -684,7 +749,10 @@ namespace _21
                 int Card_Tmp_Num = Get_One_Card(Card_Typ_Num);
                 Robot_Cards.Add(All_Cards[Card_Tmp_Num]);
                 Robot_Cards_Score.Add(Card_Tmp_Num - Card_Typ_Num * 13);
-                Give_Cards.Play();
+                if (SoundEffekt_Open_Or_Close)
+                {
+                    Give_Cards.Play();
+                }
                 if (Robot_Cards.Count > 2)
                 {
                     Robot_Cards.Remove(Player_Cards[0]);
@@ -768,7 +836,10 @@ namespace _21
                 {
                     Card_Typ_Spades.Add(i);
                 }
-                Shuffle.Play();
+                if (SoundEffekt_Open_Or_Close)
+                {
+                    Shuffle.Play();
+                }
             }
 
             void Music_Choose()
@@ -794,14 +865,14 @@ namespace _21
 
             void Game_Page_Remove_All()
             {
-                Game_Need_More_Card_Button_Position.Y += 1000;
-                Game_Stop_Button_Position.Y += 1000;
+                Game_Need_More_Card_Button_Position.Y -= 1000;
+                Game_Stop_Button_Position.Y -= 1000;
             }
 
             void All_Game_Page_Back()
             {
-                Game_Need_More_Card_Button_Position.Y -= 1000;
-                Game_Stop_Button_Position.Y -= 1000;
+                Game_Need_More_Card_Button_Position.Y += 1000;
+                Game_Stop_Button_Position.Y += 1000;
             }
 
             void Options_Page_Remove_All()
@@ -813,6 +884,9 @@ namespace _21
                 Options_page_Music_change_Right_Button_Position.Y -= 1000;
                 Options_Page_Music_Display_Location_Position.Y -= 1000;
                 Text_Music_Change_Position.Y -= 1000;
+                SoundEffekt_Open_Or_Close_Display_Location_Position.Y -= 1000;
+                Mouse_Finger_Yes_Or_No_Position.Y -= 1000;
+                Mouse_Sword_Yes_Or_No_Position.Y -= 1000;
             }
 
             void All_Options_Page_Back()
@@ -824,6 +898,9 @@ namespace _21
                 Options_page_Music_change_Right_Button_Position.Y += 1000;
                 Options_Page_Music_Display_Location_Position.Y += 1000;
                 Text_Music_Change_Position.Y += 1000;
+                SoundEffekt_Open_Or_Close_Display_Location_Position.Y += 1000;
+                Mouse_Finger_Yes_Or_No_Position.Y += 1000;
+                Mouse_Sword_Yes_Or_No_Position.Y += 1000;
             }
 
 
@@ -914,19 +991,54 @@ namespace _21
                 _spriteBatch.Draw(Options_Page_Music_Display_Location, Options_Page_Music_Display_Location_Position, Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Music_Change, Text_Music_Change_Position, Color.Black);
                 _spriteBatch.Draw(Options_Page_Music_Change_Right_Button, Options_page_Music_change_Right_Button_Position, Color.White);
+                _spriteBatch.Draw(SoundEffekt_Open_Or_Close_Display_Location, SoundEffekt_Open_Or_Close_Display_Location_Position, Color.White);
+                _spriteBatch.DrawString(Times_New_Roman_36, Text_SoundEffekt, Text_SoundEffekt_Position, Color.Black);
                 if (Music_Open_Or_Close)
                 {
                     _spriteBatch.Draw(Red_Cross, Options_Page_Music_Display_Location_Position, Color.White);
                 }
+                if (SoundEffekt_Open_Or_Close == false)
+                {
+                    _spriteBatch.Draw(Red_Cross, SoundEffekt_Open_Or_Close_Display_Location_Position, Color.White);
+                }
+                _spriteBatch.Draw(Mouse_Finger_Yes_Or_No, Mouse_Finger_Yes_Or_No_Position, Color.White);
+                _spriteBatch.Draw(Mouse_Sword_Yes_Or_No, Mouse_Sword_Yes_Or_No_Position, Color.White);
+                if (Mouse_Sword_Yes_or_No)
+                {
+                    _spriteBatch.Draw(Red_Cross, Mouse_Sword_Yes_Or_No_Position, Color.White);
+                }
+                if (Mouse_Finger_Yes_or_No)
+                {
+                    _spriteBatch.Draw(Red_Cross, Mouse_Finger_Yes_Or_No_Position, Color.White);
+                }
+                _spriteBatch.Draw(Mouse_Sword_Bronze, Mouse_Sword_Bronze_Position, Color.White);
+                _spriteBatch.Draw(Mouse_Sword_Gold, Mouse_Sword_Gold_Position, Color.White);
+                _spriteBatch.Draw(Mouse_Cursor, Options_Mouse_Cursor_Position, Color.White);
+                _spriteBatch.Draw(Mouse_Finger, Options_Mouse_Finger_Position, Color.White);
             }
 
-            if (Cursor_Or_Finger)
+            if (Mouse_Sword_Yes_or_No)
             {
-                _spriteBatch.Draw(Mouse_Cursor, Mouse_Cursor_Position, Color.White);
+                if (Cursor_Or_Finger)
+                {
+                    _spriteBatch.Draw(Mouse_Sword_Bronze, Mouse_Cursor_Position, Color.White);
+                }
+                else
+                {
+                    _spriteBatch.Draw(Mouse_Sword_Gold, Mouse_Cursor_Position, Color.White);
+                }
             }
-            else
+
+            if (Mouse_Finger_Yes_or_No)
             {
-                _spriteBatch.Draw(Mouse_Finger, Mouse_Cursor_Position, Color.White);
+                if (Cursor_Or_Finger)
+                {
+                    _spriteBatch.Draw(Mouse_Cursor, Mouse_Cursor_Position, Color.White);
+                }
+                else
+                {
+                    _spriteBatch.Draw(Mouse_Finger, Mouse_Cursor_Position, Color.White);
+                }
             }
 
             _spriteBatch.End();
