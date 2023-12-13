@@ -556,6 +556,10 @@ namespace _21
                     Time = 0;
                 }
             }
+            if (Mouse_Cursor_Position.Intersects(Game_Options_Button_Position))
+            {
+                Cursor_Or_Finger = false;
+            }
             if (Mouse_Cursor_Position.Intersects(Game_Options_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
             {
                 Options_Page_Open_Or_Close = true;
