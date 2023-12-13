@@ -64,19 +64,26 @@ namespace _21
         List<int> Player_Cards_Score = new List<int>();
         List<int> Robot_Cards_Score = new List<int>();
         bool Game_Start = false;
+        bool RobotTurn = false;
         Texture2D Game_Background;
         Texture2D Game_Need_More_Card_Button;
         Texture2D Game_Stop_Button;
         string Text_Need_More_Card = "Need More Card";
         string Text_Stop = "Stop";
         Rectangle Game_Background_Position = new Rectangle(0, 0, 1600, 960);
-        Rectangle Player_Card_Position_1 = new Rectangle(300, 300, 50, 50);
-        Rectangle Player_Card_Position_2 = new Rectangle(400, 300, 50, 50);
+        Rectangle Player_Card_Position_1 = new Rectangle(700, 700, 70, 70);
+        Rectangle Player_Card_Position_2 = new Rectangle(800, 700, 70, 70);
         Rectangle Game_Need_More_Card_Button_Position = new Rectangle(100, 560, 325, 60);
         Rectangle Stop_Button_Position = new Rectangle(1100, 560, 325, 60);
         Vector2 Text_Need_More_Card_Position = new Vector2(100, 560);
         Vector2 Player_Score_Position = new Vector2(750, 475);
         Vector2 Text_Stop_Position = new Vector2(1225, 560);
+        Rectangle Robot_Card_Position_1 = new Rectangle(675, 100, 70, 70);
+        Rectangle Robot_Card_Position_2 = new Rectangle(850, 100, 70, 70);
+        Vector2 Robot_Score_Position = new Vector2(750, 100);
+        int PlayerScore;
+        int RobotScore;
+
 
         bool Initial_Page = true;
         bool Cursor_Or_Finger = true;
@@ -87,8 +94,6 @@ namespace _21
 
 
         int music_num = 1;
-        int PlayerScore;
-        int RobotScore;
         int Tmp_Card;
         int Time = 0;
 
@@ -164,6 +169,8 @@ namespace _21
         Texture2D SQ;
         Texture2D SK;
         Texture2D SA;
+
+        Texture2D Card_Back;
 
 
 
@@ -314,6 +321,8 @@ namespace _21
             SK = Content.Load<Texture2D>("card_spades_K");
             SA = Content.Load<Texture2D>("card_spades_A");
 
+            Card_Back = Content.Load<Texture2D>("card_back");
+
             All_Cards[1] = CA;
             All_Cards[2] = C2;
             All_Cards[3] = C3;
@@ -370,6 +379,7 @@ namespace _21
             All_Cards[51] = SQ;
             All_Cards[52] = SK;
 
+            All_Cards[53] = Card_Back;
 
             Game_Need_More_Card_Button = Content.Load<Texture2D>("yellow_button00");
             Game_Stop_Button = Content.Load<Texture2D>("yellow_button00");
@@ -395,6 +405,8 @@ namespace _21
 
             PlayerScore = Player_Score();
             RobotScore = Robot_Score();
+
+
 
             if (Card_Typ_Clubs.Count + Card_Typ_Diamonds.Count + Card_Typ_Hearts.Count + Card_Typ_Spades.Count == 0)
             {
@@ -494,10 +506,10 @@ namespace _21
                 Initial_Page_Remove_All();
                 GameStart();
             }
-            if (Beyond_21_Player() || Beyond_21_Robot())
+            if (Beyond_21_Player())
             {
                 Time++;
-                if (Time == 60)
+                if (Time == 30)
                 {
                     New_turn();
                     Time = 0;
@@ -518,13 +530,29 @@ namespace _21
             }
             if (Mouse_Cursor_Position.Intersects(Stop_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
             {
-                Robot_Turn();
+                RobotTurn = true;
             }
-
+            if (RobotTurn == true)
+            {
+                Time++;
+                if (Time == 45)
+                {
+                    Robot_Turn();
+                    Time = 0;
+                }
+            }
 
             void Robot_Turn()
             {
-
+                Give_Cards.Play();
+                if (Robot_Score() <= PlayerScore && Robot_Score() < 21)
+                {
+                    Robot_Data();
+                }
+                else
+                {
+                    New_turn();
+                }
             }
 
             void New_turn()
@@ -534,6 +562,7 @@ namespace _21
                 Robot_Cards_Score.Clear();
                 Player_Cards.Clear();
                 Robot_Cards.Clear();
+                RobotTurn = false;
                 GameStart();
             }
 
@@ -630,6 +659,10 @@ namespace _21
                 Robot_Cards.Add(All_Cards[Card_Tmp_Num]);
                 Robot_Cards_Score.Add(Card_Tmp_Num - Card_Typ_Num * 13);
                 Give_Cards.Play();
+                if (Robot_Cards.Count > 2)
+                {
+                    Robot_Cards.Remove(Player_Cards[0]);
+                }
             }
 
             int Get_One_Card(int Card_Typ_Num)
@@ -835,6 +868,17 @@ namespace _21
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Need_More_Card, Text_Need_More_Card_Position, Color.Black);
                 _spriteBatch.Draw(Game_Stop_Button, Stop_Button_Position,Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Stop, Text_Stop_Position, Color.Black);
+                _spriteBatch.Draw(Robot_Cards[0], Robot_Card_Position_1, Color.White);
+                if (RobotTurn)
+                {
+                    _spriteBatch.DrawString(Times_New_Roman_36, RobotScore.ToString(), Robot_Score_Position, Color.Black);
+                    _spriteBatch.Draw(Robot_Cards[1], Robot_Card_Position_2, Color.White);
+                }
+                else
+                {
+                    _spriteBatch.DrawString(Times_New_Roman_36, "0", Robot_Score_Position, Color.Black);
+                    _spriteBatch.Draw(All_Cards[53], Robot_Card_Position_2, Color.White);
+                }
             }
 
             if (Cursor_Or_Finger)
