@@ -77,7 +77,7 @@ namespace _21
         Rectangle Player_Card_Position_1 = new Rectangle(700, 700, 70, 70);
         Rectangle Player_Card_Position_2 = new Rectangle(800, 700, 70, 70);
         Rectangle Game_Need_More_Card_Button_Position = new Rectangle(100, 560, 325, 60);
-        Rectangle Stop_Button_Position = new Rectangle(1100, 560, 325, 60);
+        Rectangle Game_Stop_Button_Position = new Rectangle(1100, 560, 325, 60);
         Vector2 Text_Need_More_Card_Position = new Vector2(100, 560);
         Vector2 Player_Score_Position = new Vector2(765, 475);
         Vector2 Text_Stop_Position = new Vector2(1225, 560);
@@ -539,11 +539,11 @@ namespace _21
                 Player_Data();
             }
 
-            if (Mouse_Cursor_Position.Intersects(Stop_Button_Position))
+            if (Mouse_Cursor_Position.Intersects(Game_Stop_Button_Position))
             {
                 Cursor_Or_Finger = false;
             }
-            if (Mouse_Cursor_Position.Intersects(Stop_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
+            if (Mouse_Cursor_Position.Intersects(Game_Stop_Button_Position) && mouse.LeftButton == ButtonState.Pressed && oldmouse.LeftButton == ButtonState.Released)
             {
                 RobotTurn = true;
             }
@@ -795,13 +795,13 @@ namespace _21
             void Game_Page_Remove_All()
             {
                 Game_Need_More_Card_Button_Position.Y += 1000;
-                Stop_Button_Position.Y += 1000;
+                Game_Stop_Button_Position.Y += 1000;
             }
 
             void All_Game_Page_Back()
             {
                 Game_Need_More_Card_Button_Position.Y -= 1000;
-                Stop_Button_Position.Y -= 1000;
+                Game_Stop_Button_Position.Y -= 1000;
             }
 
             void Options_Page_Remove_All()
@@ -881,7 +881,7 @@ namespace _21
                 _spriteBatch.DrawString(Times_New_Roman_48, PlayerScore.ToString(), Player_Score_Position, Color.Black);
                 _spriteBatch.Draw(Game_Need_More_Card_Button, Game_Need_More_Card_Button_Position, Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Need_More_Card, Text_Need_More_Card_Position, Color.Black);
-                _spriteBatch.Draw(Game_Stop_Button, Stop_Button_Position,Color.White);
+                _spriteBatch.Draw(Game_Stop_Button, Game_Stop_Button_Position,Color.White);
                 _spriteBatch.DrawString(Times_New_Roman_36, Text_Stop, Text_Stop_Position, Color.Black);
                 _spriteBatch.Draw(Robot_Cards[0], Robot_Card_Position_1, Color.White);
                 _spriteBatch.Draw(Game_Robot_Score_Display_Location, Game_Robot_Score_Display_Location_Position, Color.White);
